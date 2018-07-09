@@ -51,7 +51,25 @@ public class Item {
 		this.address = builder.address;
 		this.categories = builder.categories;
 		this.imageUrl = builder.imageUrl;
+		this.url = builder.url;
 		this.distance = builder.distance;
+	}
+	
+	public JSONObject toJSONObject() {
+		JSONObject obj = new JSONObject();
+		try {
+			obj.put("item_id", itemId);
+			obj.put("name", name);
+			obj.put("rating", rating);
+			obj.put("address", address);
+			obj.put("categories", new JSONArray(categories));
+			obj.put("image_url", imageUrl);
+			obj.put("url", url);
+			obj.put("distance", distance);
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		return obj;
 	}
 	
 	public String getItemId() {
@@ -116,22 +134,5 @@ public class Item {
 		public Item build() {
 			return new Item(this);
 		}
-	}
-	
-	public JSONObject toJSONObject() {
-		JSONObject obj = new JSONObject();
-		try {
-			obj.put("item_id", itemId);
-			obj.put("name", name);
-			obj.put("rating", rating);
-			obj.put("address", address);
-			obj.put("categories", new JSONArray(categories));
-			obj.put("image_url", imageUrl);
-			obj.put("url", url);
-			obj.put("distance", distance);
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
-		return obj;
 	}
 }

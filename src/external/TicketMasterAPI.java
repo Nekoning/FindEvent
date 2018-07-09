@@ -24,6 +24,7 @@ public class TicketMasterAPI {
 	private static final String EMBEDDED = "_embedded";
 	private static final String EVENTS = "events";
 	private static final String NAME = "name";
+	
 	private static final String ID = "id";
 	private static final String URL_STR = "url";
 	private static final String RATING = "rating";
@@ -70,7 +71,7 @@ public class TicketMasterAPI {
 			StringBuilder response = new StringBuilder();
 			try (BufferedReader in = new BufferedReader(
 					new InputStreamReader(connection.getInputStream()))) {
-				String inputLine;
+				String inputLine = "";
 				while ((inputLine = in.readLine()) != null) {
 					response.append(inputLine);
 				}
@@ -191,7 +192,7 @@ public class TicketMasterAPI {
 				JSONObject image = images.getJSONObject(i);
 				
 				if (!image.isNull(URL_STR)) {
-					String urlStr = image.getString(URL_STR);
+					return image.getString(URL_STR);
 				}
 			}
 		}

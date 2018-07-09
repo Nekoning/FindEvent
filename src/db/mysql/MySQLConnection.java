@@ -219,7 +219,7 @@ public class MySQLConnection implements DBConnection {
 //					item.getItemId(), item.getName(), item.getRating(), item.getAddress(), 
 //					item.getImageUrl(), item.getUrl(), item.getDistance());
 			
-			String sql = "INSERT IGNORE INTO items VALUES(?, ?, ?, ?, ?, ?, ?)";
+			String sql = "INSERT IGNORE INTO items VALUES(?,?,?,?,?,?,?)";
 			PreparedStatement stmt = conn.prepareStatement(sql);
 			stmt.setString(1, item.getItemId());
 			stmt.setString(2, item.getName());
@@ -230,7 +230,7 @@ public class MySQLConnection implements DBConnection {
 			stmt.setDouble(7, item.getDistance());		
 			stmt.execute();
 			
-			sql = "INSERT IGNORE INTO categories VALUES (?, ?)";
+			sql = "INSERT IGNORE INTO categories VALUES (?,?)";
 			stmt = conn.prepareStatement(sql);
 			stmt.setString(1, item.getItemId());
 			for (String category : item.getCategories()) {
@@ -244,14 +244,44 @@ public class MySQLConnection implements DBConnection {
 
 	@Override
 	public String getFullname(String userId) {
-		// TODO Auto-generated method stub
-		return null;
+		if (conn == null) {
+			return null;
+		}
+		String name = "";
+		try {
+			String sql = "SELECT first_name, last_name from users WHERE user_id = ?";
+			PreparedStatement statement = conn.prepareStatement(sql);
+			statement.setString(1, userId);
+			ResultSet rs = statement.executeQuery();
+			if (rs.next()) {
+				name = String.join(" ", rs.getString("first_name"), rs.getString("last_name"));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return name;
+
 	}
 
 	@Override
 	public boolean verifyLogin(String userId, String password) {
-		// TODO Auto-generated method stub
+		if (conn == null) {
+			return false;
+		}
+		try {
+			String sql = "SELECT user_id from users WHERE user_id = ? and password = ?";
+			PreparedStatement statement = conn.prepareStatement(sql);
+			statement.setString(1, userId);
+			statement.setString(2, password);
+			ResultSet rs = statement.executeQuery();
+			if (rs.next()) {
+				return true;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return false;
+
 	}
 
 }
